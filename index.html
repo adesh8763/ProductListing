@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Listing</title>
+    <script
+    src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script
+    src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+<style>
+ body{
+    margin:0;
+    padding:0;
+    background-color: bisque;
+ }
+input{
+    width: 25%;
+    height: 5vh;
+    text-align: center;
+    border-radius: 20px;
+    font-size: 27px;
+}
+input:focus{
+    outline:none;
+
+}
+#heading{
+    font-size: 50px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+table{
+    border-collapse: collapse;
+    width:50%;
+    height:auto;
+}
+th,td{
+    padding:10px;
+    height:1.5vh;
+    width:auto;
+    font-size:larger;
+    text-align: center;
+}
+button{
+    padding:10px;
+    border-radius: 10px;
+    background-color: aquamarine;
+    font-size: 25px;
+    font-weight: bolder;
+}
+</style>
+</head>
+<body>
+    <center>
+    <div id = "heading"><span>Product Listing</span></div><hr width = "60%"><br>
+    <div id = "formHolder">
+        <input type = "text" placeholder = "Product Name" id = "productName">
+        <br><br>
+        <input type = "number" placeholder = "High" id = "high">
+        <br><br>
+        <input type = "number" placeholder = "Low" id = "low">
+        <br><br>
+        <button id = "submit">Add Product</button>
+    </div><br><br><br>
+    <div id = "tableContainer">
+        <table border = "2" id = "main">
+        <thead>
+			<tr>
+                <th>Seriel No</th>
+				<th>PDT Name</th>
+				<th>High(A)</th>
+				<th>Low(B)</th>
+				<th>High - Low (C)</th>
+                <th>C x 0.67 (D)</th>
+                <th>D/4 (E)</th>
+                <th>Final Price (E)</th>
+			</tr>
+		</thead>
+        <tbody id = "tbd">
+            
+        </tbody>
+        </table>
+        <br><br>
+        <button id = "exportToExcel">Save As Excel</button>
+    </div><br><br><br></center>
+    <script>
+        var serial_no = 1;
+
+        document.getElementById('submit').addEventListener('click', ()=>{
+            var high = document.getElementById('high').value;
+            var low = document.getElementById('low').value;
+            var productName = document.getElementById('productName').value;
+            var tableBody = document.getElementById('tbd');
+            var c = high - low;
+            var d = Math.round(0.67 * c);
+            var e = Math.round(d/4);
+
+            tableBody.innerHTML += "<tr> <td>" + serial_no +"</td><td>"+productName+ "</td> <td>" + high + "</td><td>" + low + "</td><td>" + c + "</td><td>" + d + "</td><td>" + e + "</td><td>" + e + "</td></tr>";
+            serial_no++;
+         
+            setTimeout(()=>{
+                document.getElementById('high').value = '';
+                document.getElementById('low').value = '';
+                document.getElementById('productName').value = '';
+           },200);
+        });
+        document.getElementById('exportToExcel').addEventListener('click',()=>{
+            var fileName = prompt("Save as (file name)");
+            
+                $('#main').table2excel({
+		            exclude: ".no-export",
+		            filename: fileName + ".xls",
+		            fileext: ".xls",
+		            exclude_links: true,
+		            exclude_inputs: true
+            
+	});
+        });
+    </script>
+</body>
+</html>
